@@ -3,7 +3,6 @@ package com.cxq.pool;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class DataSource {
     }
 
     private static Connection createNewConnection() {
+        //创建一个新的连接
         String user = "steven";
         String password = "steven";
         String url = "jdbc:mysql://localhost:3306/dbcxq";
@@ -48,8 +48,13 @@ public class DataSource {
         return connection;
     }
 
+    /**
+     *If connectionPool is null,invoke createConnection.
+     *If connectionPool is not null,return linkList[0]
+     *
+     * */
     private synchronized Connection getConnection() {
-        //获取一个新的连接
+        //获取连接
         Connection connection = null;
         if (connectionPool.isEmpty()) {
             connection = createNewConnection();
@@ -59,6 +64,12 @@ public class DataSource {
         return connection;
     }
 
+    /**
+     *关闭连接
+     *
+     * @param connection what connection will be return.
+     *
+     * */
     public void closeConnection(Connection connection) {
         try {
             if (connectionPool.size() < connectionPoolSize) {
