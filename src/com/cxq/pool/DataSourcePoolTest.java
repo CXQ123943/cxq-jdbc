@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * @author CXQ
  * @version 1.0
  */
-public class DataSourceTest {
+public class DataSourcePoolTest {
 
     @Test
     public void dataSourceTest() {

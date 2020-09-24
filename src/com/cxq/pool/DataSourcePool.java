@@ -10,7 +10,7 @@ import java.util.List;
  * @author CXQ
  * @version 1.0
  */
-public class DataSource {
+public class DataSourcePool {
     private static List<Connection> connectionPool;
     private static int connectionPoolSize = 10;
 
