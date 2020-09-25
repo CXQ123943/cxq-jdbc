@@ -1,4 +1,4 @@
-package com.cxq.pool;
+package com.cxq.test;
 
 import com.cxq.datasource.DataSource;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * @author CXQ
  * @version 1.0
  */
-public class DataSourcePoolTest {
+public class DataSourceTest {
 
     @Test
     public void dataSourceTest() {

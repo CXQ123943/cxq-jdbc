@@ -1,5 +1,6 @@
-package com.cxq.datasource;
+package com.cxq.test;
 
+import com.cxq.pool.DataSourcePool;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -9,18 +10,18 @@ import java.sql.SQLException;
  * @author CXQ
  * @version 1.0
  */
-public class DataSourceTest {
+public class DataSourcePoolTest {
 
     @Test
     public void dataSourceTest() {
-        DataSource dataSource = new DataSource();
-        Connection connection = dataSource.getConnection();
+        DataSourcePool dataSourcePool = new DataSourcePool();
+        Connection connection = dataSourcePool.getConnection();
         try {
             System.out.println(connection.isClosed() ? "fail" : "success");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            dataSource.closeConnection(connection);
+            dataSourcePool.closeConnection(connection);
         }
     }
 
