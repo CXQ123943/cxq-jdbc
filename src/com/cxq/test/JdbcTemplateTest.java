@@ -3,6 +3,7 @@ package com.cxq.test;
 import com.cxq.jdbc.JdbcTemplate;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,36 @@ public class JdbcTemplateTest {
     public void delete() {
         String sql = "DELETE FROM `JDBC` WHERE `ID` = ?";
         System.out.println(jdbcTemplate.update(sql,  1));
+    }
+
+    @Test
+    public void batchInsertWithSameSql() {
+        String sql = "INSERT INTO `JDBC` (`NAME`) VALUES (?)";
+        Object[] param01 = {"zhaosi"};
+        Object[] param02 = {"liuneng"};
+        Object[] param03 = {"guangkun"};
+        int[] result = jdbcTemplate.batchUpdate(sql, param01, param02, param03);
+        System.out.println(Arrays.toString(result));
+    }
+
+    @Test
+    public void batchUpdateWithSameSql() {
+        String sql = "UPDATE `JDBC` SET `NAME` = ? WHERE `ID` = ?";
+        Object[] param01 = {"aiyiweo",6};
+        Object[] param02 = {"nimeifu",7};
+        Object[] param03 = {"memeda",8};
+        int[] result = jdbcTemplate.batchUpdate(sql,param01,param02,param03);
+        System.out.println(Arrays.toString(result));
+    }
+
+    @Test
+    public void batchDeleteWithSameSql() {
+        String sql = "DELETE FROM `JDBC` WHERE `ID` = ?";
+        Object[] param01 = {3};
+        Object[] param02 = {4};
+        Object[] param03 = {5};
+        int[] result = jdbcTemplate.batchUpdate(sql, param01, param02, param03);
+        System.out.println(Arrays.toString(result));
     }
 
     @Test
