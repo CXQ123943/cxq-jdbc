@@ -3,6 +3,9 @@ package com.cxq.test;
 import com.cxq.jdbc.JdbcTemplate;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author CXQ
  * @version 1.0
@@ -13,6 +16,18 @@ public class JdbcTemplateTest {
     @Test
     public void queryForList() {
         String sql = "SELECT * FROM EMP WHERE ENAME != ? AND SAL > ?";
-        jdbcTemplate.queryForList(sql,"SMITH",1500);
+        List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, "SMITH", 1500);
+        for (Map<String, Object> map : list) {
+            System.out.println(map);
+        }
+    }
+
+    @Test
+    public void queryForMap() {
+        String sql = "SELECT * FROM EMP WHERE EMPNO = ?";
+        List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, "7654");
+        for (Map<String, Object> map : list) {
+            System.out.println(map);
+        }
     }
 }
