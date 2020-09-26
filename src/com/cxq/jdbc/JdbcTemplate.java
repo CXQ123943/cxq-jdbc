@@ -14,7 +14,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class JdbcTemplate {
-    private DataSourcePoolByFactory dataSourceFactory =  DataSourceFactory.getDataSource();
+    private DataSourcePoolByFactory dataSourceFactory = DataSourceFactory.getDataSource();
 
     public void execute(String sql) {
         boolean result = true;
@@ -37,6 +37,29 @@ public class JdbcTemplate {
         }
     }
 
+    public int update(String sql, Object... params) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int result = -1;
+        try {
+            connection = dataSourceFactory.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            result = sendSql(preparedStatement, params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(preparedStatement);
+            dataSourceFactory.closeConnection(connection);
+        }
+        return result;
+    }
+
+    private int sendSql(PreparedStatement preparedStatement, Object... params) throws SQLException {
+        for (int i = 0, j = params.length; i < j; i++) {
+            preparedStatement.setObject(i + 1,params[i]);
+        }
+        return preparedStatement.executeUpdate();
+    }
 
 
     public List<Map<String, Object>> queryForList(String sql, Object... params) {
@@ -75,7 +98,7 @@ public class JdbcTemplate {
 
     private ResultSet sendSqlAndGetResultSet(PreparedStatement prepareStatement, Object[] params) throws SQLException {
         for (int i = 0, j = params.length; i < j; i++) {
-            prepareStatement.setObject(i +1, params[i]);
+            prepareStatement.setObject(i + 1, params[i]);
         }
         return prepareStatement.executeQuery();
     }
@@ -96,7 +119,7 @@ public class JdbcTemplate {
                 //通过元数据获取列名
                 String columnName = metaData.getColumnName(i);
                 Object value = resultSet.getObject(columnName);
-                tempMap.put(columnName,value);
+                tempMap.put(columnName, value);
             }
             resultList.add(tempMap);
         }
@@ -106,8 +129,9 @@ public class JdbcTemplate {
     /**
      * 迭代器
      * 测试用的，正常执行得注释
+     *
      * @param resultSet 获得的结果
-     * */
+     */
     private void iter(ResultSet resultSet) {
         try {
             while (resultSet.next()) {

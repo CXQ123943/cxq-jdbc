@@ -15,11 +15,29 @@ public class JdbcTemplateTest {
 
     @Test
     public void execute() {
-        String sql = "CREATE TABLE `EXECUTE_TEST` (" +
+        String sql = "CREATE TABLE `JDBC` (" +
                 "`ID` INT AUTO_INCREMENT PRIMARY KEY ," +
                 "`NAME` VARCHAR(50) NOT NULL) " +
                 "ENGINE = INNODB DEFAULT CHARSET UTF8MB4";
         jdbcTemplate.execute(sql);
+    }
+
+    @Test
+    public void insert() {
+        String sql = "INSERT INTO `JDBC` (`NAME`) VALUE (?)";
+        System.out.println(jdbcTemplate.update(sql,"zds"));
+    }
+
+    @Test
+    public void update() {
+        String sql = "UPDATE `JDBC` SET `NAME` = ? WHERE `ID` = ?";
+        System.out.println(jdbcTemplate.update(sql, "aiyowei", 1));
+    }
+
+    @Test
+    public void delete() {
+        String sql = "DELETE FROM `JDBC` WHERE `ID` = ?";
+        System.out.println(jdbcTemplate.update(sql,  1));
     }
 
     @Test
