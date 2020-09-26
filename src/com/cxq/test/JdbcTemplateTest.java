@@ -72,6 +72,15 @@ public class JdbcTemplateTest {
     }
 
     @Test
+    public void batchUpdateWithDifferentSql() {
+        String insertSql = "INSERT INTO `JDBC` (`NAME`) VALUES ('FEIJI')";
+        String updateSql = "UPDATE `JDBC` SET `NAME` = 'DAPAO' WHERE `NAME` = 'FEIJI'";
+        String[] sqls = {insertSql, updateSql};
+        int[] result = jdbcTemplate.batchUpdate(sqls);
+        System.out.println(Arrays.toString(result));
+    }
+
+    @Test
     public void queryForList() {
         String sql = "SELECT * FROM EMP WHERE ENAME != ? AND SAL > ?";
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, "SMITH", 1500);

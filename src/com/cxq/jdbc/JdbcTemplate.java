@@ -2,6 +2,7 @@ package com.cxq.jdbc;
 
 import com.cxq.factory.DataSourceFactory;
 import com.cxq.factory.DataSourcePoolByFactory;
+import com.mysql.cj.xdevapi.Collection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -102,6 +103,42 @@ public class JdbcTemplate {
                 e.printStackTrace();
             }
             closeStatement(prepareStatement);
+            dataSourceFactory.closeConnection(connection);
+        }
+        return result;
+    }
+
+    /**
+     * 处理不同类型的sql操作DML
+     *
+     * @param sqls 一个String类型的一维数组
+     * */
+    public int[] batchUpdate(String... sqls) {
+        Connection connection = null;
+        Statement statement = null;
+        int[] result = null;
+        try {
+            connection = dataSourceFactory.getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            result = sendSqlAndGetIntArray(statement, sqls);
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            closeStatement(statement);
             dataSourceFactory.closeConnection(connection);
         }
         return result;
@@ -215,6 +252,19 @@ public class JdbcTemplate {
             preparedStatement.addBatch();
         }
         return preparedStatement.executeBatch();
+    }
+
+    /**
+     * 重载sendSqlAndGetIntArray()
+     *
+     * @param statement 预执行区域
+     * @param sqls String类型的sql一维数组
+     * */
+    private int[] sendSqlAndGetIntArray(Statement statement, String... sqls) throws SQLException {
+        for (String sql : sqls) {
+            statement.addBatch(sql);
+        }
+        return statement.executeBatch();
     }
 
     /**
