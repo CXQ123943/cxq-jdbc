@@ -14,6 +14,15 @@ public class JdbcTemplateTest {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate();
 
     @Test
+    public void execute() {
+        String sql = "CREATE TABLE `EXECUTE_TEST` (" +
+                "`ID` INT AUTO_INCREMENT PRIMARY KEY ," +
+                "`NAME` VARCHAR(50) NOT NULL) " +
+                "ENGINE = INNODB DEFAULT CHARSET UTF8MB4";
+        jdbcTemplate.execute(sql);
+    }
+
+    @Test
     public void queryForList() {
         String sql = "SELECT * FROM EMP WHERE ENAME != ? AND SAL > ?";
         List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, "SMITH", 1500);

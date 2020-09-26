@@ -16,6 +16,29 @@ import java.util.Map;
 public class JdbcTemplate {
     private DataSourcePoolByFactory dataSourceFactory =  DataSourceFactory.getDataSource();
 
+    public void execute(String sql) {
+        boolean result = true;
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = dataSourceFactory.getConnection();
+            statement = connection.createStatement();
+            result = statement.execute(sql);
+            if (!result) {
+                System.out.println("创建成功");
+            } else {
+                System.out.println("创建表失败");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+            dataSourceFactory.closeConnection(connection);
+        }
+    }
+
+
+
     public List<Map<String, Object>> queryForList(String sql, Object... params) {
         List<Map<String, Object>> result = new ArrayList<>();
         Connection connection = null;
@@ -102,6 +125,16 @@ public class JdbcTemplate {
         try {
             if (resultSet != null) {
                 resultSet.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeStatement(Statement statement) {
+        try {
+            if (statement != null) {
+                statement.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
