@@ -112,7 +112,7 @@ public class JdbcTemplate {
      * 处理不同类型的sql操作DML
      *
      * @param sqls 一个String类型的一维数组
-     * */
+     */
     public int[] batchUpdate(String... sqls) {
         Connection connection = null;
         Statement statement = null;
@@ -191,6 +191,27 @@ public class JdbcTemplate {
         return resultMap;
     }
 
+    /**
+     * 用于数据数量查询，该方法接收一个包含占位符的SQL语句和对应占位符的参数列表，返回int类型的结果。
+     *
+     * @param sql    接收的一个包含占位符的sql语句
+     * @param params 对应占位符的一维数组
+     * @return int类型的结果
+     */
+    public int queryForInt(String sql, Object... params) {
+        int result = -1;
+        Map<String, Object> map = queryForMap(sql, params);
+        Object value = null;
+        for (String key : map.keySet()) {
+            value = map.get(key);
+            break;
+        }
+        if (value != null) {
+            result = Integer.parseInt(value.toString());
+        }
+        return result;
+    }
+
     //---------------------------Encapsulate JDBC methods------------------------------------------
 
     /**
@@ -258,8 +279,8 @@ public class JdbcTemplate {
      * 重载sendSqlAndGetIntArray()
      *
      * @param statement 预执行区域
-     * @param sqls String类型的sql一维数组
-     * */
+     * @param sqls      String类型的sql一维数组
+     */
     private int[] sendSqlAndGetIntArray(Statement statement, String... sqls) throws SQLException {
         for (String sql : sqls) {
             statement.addBatch(sql);

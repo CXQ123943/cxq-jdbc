@@ -97,4 +97,10 @@ public class JdbcTemplateTest {
             System.out.println(map);
         }
     }
+
+    @Test
+    public void queryForInt() {
+        String sql = "SELECT COUNT(`ID`) FROM JDBC WHERE ID > ?";
+        System.out.println(jdbcTemplate.queryForInt(sql,3));
+    }
 }
