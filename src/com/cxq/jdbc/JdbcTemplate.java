@@ -2,7 +2,6 @@ package com.cxq.jdbc;
 
 import com.cxq.factory.DataSourceFactory;
 import com.cxq.factory.DataSourcePoolByFactory;
-import com.mysql.cj.xdevapi.Collection;
 
 import java.sql.*;
 import java.util.ArrayList;
